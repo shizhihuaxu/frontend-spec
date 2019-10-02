@@ -63,17 +63,17 @@
 
 - 然后使用 cz-conventional-changelog 初始化项目，需要node >=10, npm >=6。
 
-```bash
-commitizen init cz-conventional-changelog --save --save-exact
-
-# 生成 change-log
-conventional-changelog -p angular -i CHANGELOG.md -s -r 0
-
-#或者在 package.json 中加入
-"scripts": {
-	 "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 
-}
-```
+  ```javascript
+  commitizen init cz-conventional-changelog --save --save-exact
+  
+  // 生成 change-log
+  conventional-changelog -p angular -i CHANGELOG.md -s -r 0
+  
+  // 或者在 package.json 中加入
+  "scripts": {
+  	 "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 
+  }
+  ```
 
 - 在提交 commit 前使用 husky 添加钩子，做格式校验。
 
@@ -92,6 +92,9 @@ conventional-changelog -p angular -i CHANGELOG.md -s -r 0
   ```
 
 ### 1.3  开发规范
+
+- JavaScript 代码风格：[airbnb](https://github.com/airbnb/javascript) 
+- CSS 代码风格，命名规范
 
 ### 1.4  构建规范
 
@@ -117,19 +120,104 @@ conventional-changelog -p angular -i CHANGELOG.md -s -r 0
 - 触发的条件。什么时候自动构建。
 - 确定持续集成中要做哪些事情。
 
-### 1.7 任务管理
+### 1.7  任务管理
 
 ​		任务管理工具可以帮助 leader 了解任务进度，清晰的看到哪些需要做，哪些正在做，完成之后及时更改任务状态。
 
-## 2  技术栈
+## 2  技术选型
+
+​		在团队中应该选择一个比较稳定且成员比较熟练的框架，熟悉它相关的生态系统、配套工具、最佳实战、性能调优的方式。
+
+### 2.1  框架及生态系统
+
+|     框架      |         Vue         |      React       |
+| :-----------: | :-----------------: | :--------------: |
+| node 版本管理 |         nvm         |       nvm        |
+|    包管理     |         npm         |       npm        |
+|    脚手架     |      vue-cli 3      | create-react-app |
+|   状态管理    |        vuex         |   mobox/redux    |
+|     路由      |     vue-router      |   react-router   |
+|    UI 框架    |  iview /elementUI   |    Ant Design    |
+| CSS 预处理器  |      scss/less      |    scss/less     |
+|  TypeScript   |     vue 3 /待定     |       成熟       |
+| 服务器端渲染  |       Nuxt.js       |     Next.js      |
+|    移动端     |                     |   React Native   |
+|   桌面应用    |      Electron       |                  |
+|   单元测试    | karma 、mocha、chai |  jest 、enzyme   |
+| 代码格式校验  |       eslint        |      eslint      |
+
+### 2.2  其它
+
+- 项目的目录组织形式
+- css 命名方式，公共代码定义哪些内容
+- js 的常用工具函数库
+- 迎接新技术，考虑学习成本、收益和风险
 
 
 
 ## 3  浏览器兼容性
 
+​		应该根据公司的项目类型或者目标用户确定软件要兼容的浏览器版本.
+
+### 3.1  确定兼容策略
+
+​		**渐进增强**还是**优雅降级**？
+
+​		渐进增强一开始针对低版本的浏览器构建页面，满足最基本的功能，再针对高级浏览器进行效果，交互，追加各种功能以达到更好用户体验，以实现最基础功能为基本，向上兼容。
+
+​		优雅降级一开始针对一个高版本的浏览器构建页面，先完善所有的功能，然后针对各个不同的浏览器进行测试，修复，保证低级浏览器也有基本功能可以使用。
+
+### 3.2  浏览器分级
+
+​		[YUI 的浏览器分级策略](https://github.com/cssmagic/blog/issues/47)，将浏览器划分为多个等级，不同等级代表了不同的支持程度。
+
 ## 4  项目组织
 
+- 项目命名：小写字母 + 连字符，字母开头。
+- 项目目录组织风格。
+- 常用的 js ，css 文件的名称。
+- 项目中必须包含的文件：项目说明（READEME.md）、版本变更记录（CHANGELOG.md）、项目许可（LICENSE）
+- 文件命名：小写字母 + 连字符，字母开头。
+
 ## 5  编码规范
+
+### 5.1  JavaScript
+
+​		Lint 工具：ESLint
+
+​		规范：[Airbnb 代码风格](https://github.com/airbnb/javascript)，[JavaScript Standard Style](https://standardjs.com/) 
+
+​		类型检查：TypeScript
+
+### 5.2 CSS 
+
+​		Lint 工具：
+
+​		规范：Airbnb CSS / Sass Style Guide
+
+​		方法论：BEM，CSS Modules、Styled Component、OOCSS
+
+### 5.3  Vue / React
+
+​		[vue 风格指南](https://cn.vuejs.org/v2/style-guide/)
+
+​		[React 风格指南](https://github.com/airbnb/javascript/tree/master/react)
+
+### 5.4  编辑器与代码格式化工具
+
+​		推荐使用 vscode 作为编辑器；在 vscode 中使用 Prettier。
+
+​		Vue ：Vetur
+
+​		React：
+
+### 5.5  Code Review
+
+- 模块耦合度
+- 代码重复
+- 代码健壮性：是否存在安全性问题、错误是否被处理、是否存在潜在的性能问题和异常
+- 代码的性能
+- 一些 code review 的工具
 
 ## 6  文档规范
 
