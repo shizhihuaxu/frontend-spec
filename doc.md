@@ -1,5 +1,7 @@
 [TOC]
 
+
+
 ## 1  工作流规范
 
 ### 1.1  版本规范
@@ -8,11 +10,11 @@
 
 ​		版本号的迭代应该遵循某一规则，使用户可以了解版本变更的影响范围。github 的[语义化版本表示](https://semver.org/lang/zh-CN/)就是关于版本定义的一个方法原则，例如 x.y.z：
 
-​				主版本号：x 为 0 表示软件还在初始开发阶段。x 的增加表示做了不兼容的 API 修改。x 的每次更新，y、z 都必须归 0。
+​				主版本号：x 为 0 表示软件还在初始开发阶段。x 的增加表示做了不兼容的 API 修改。x 的每次更新，y、z 都必须归 0。以 0.1.0 作为你的初始化开发版本。
 
-​				次版本号：y ，做了向下兼容的功能性新增。
+​				次版本号：y ，做了向下兼容的功能性新增。y 的每次更新，z 必须归 0。
 
-​				修订号：z，做了向下兼容的 bug 修正。y 的每次更新，z 必须归 0。
+​				修订号：z，做了向下兼容的 发布版 bug 修正。
 
 ​		版本号的修饰词：
 
@@ -32,7 +34,7 @@
 
 ​				次版本号：需求变动时更改。
 
-​				修订号：修复产品中的 bug、优化时的更改。
+​				修订号：修复产品中的 bug、优化时的更改，非开发时的 bug 。
 
 ​		可以一个次版本号对应多个需求，但是尽量不要把需求定义在修订号中，否则会对开发流程产生很大的干扰。
 
@@ -42,17 +44,37 @@
 
 #### 1.2.1  分支管理规范
 
-​		master 分支：发布稳定版。受保护分支，不可直接提交代码。
+​		项目中应避免随意创建分支，合并代码应保持提交线的脉络清晰，可以使用[Github Flow](http://scottchacon.com/2011/08/31/github-flow.html)、 [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/) 、[GitLabFlow](https://docs.gitlab.com/ee/workflow/gitlab_flow.html)或自定义分支管理模型。
 
-​		develop 分支：开发稳定版，此分支所有新功能研发和 bug 修复的基础。当系统功能测试通过后，向 master 分支提交 pr 
+​		如果使用 Git Flow 可以安装 [gitflow](https://github.com/nvie/gitflow/wiki/Windows) 工具，这样使用响应命令会自动从相应分支切出分支，避免出错。
 
-​		feature 分支：从 develop 分支切出来进行新功能的开发。单元测试通过后向 develop 分支提交 pr。
+|   分支名   |         作用         | 分支来源 |   分支合并目标   |    生命周期    |
+| :--------: | :------------------: | :------: | :--------------: | :------------: |
+|   master   |  主分支，打最终 tag  |          |                  |    一直存在    |
+|  develop   |      开发稳定版      |  master  |      master      |    一直存在    |
+| feature-*  |      新需求研发      | develop  |     develop      | 新功能开发结束 |
+| realease-* | 标记产品中的版本信息 | develop  | develop & master |    版本发布    |
+|  hotfix-*  | 线上发布版 bug 修复  |  master  | develop & master |  bug 修复结束  |
 
-​		bugfix 分支：用于从 develop 分支切出来修复 bug 。单元测试通过后向 develop 分支提交 pr。
+​		master 分支：主分支、受保护分支，不可直接提交代码，发布稳定版，在此分支上打 tag。
+
+​		develop 分支：开发稳定版，此分支所有新功能研发基础。当系统功能测试通过后，向 master 分支提交 pr 。
+
+​		feature 分支：从 develop 分支切出来进行新功能的开发。单元测试通过后合并到 develop 分支。结束了一次完整的发布流程后，才可创建新的特性分支。
+
+​		release 分支：当 develop 分支的新状态稳定后，从 develop 分支切出来，用于发布分支，适用于产品发布、产品迭代，修改产品版本信息后合并到 develop 分支 ，并且将此分支合并到 master 分支上，然后在 master 分支上打一个 tag。
+
+​		hotfix 分支：
+
+​				当生产环境中的软件遇到了异常情况或者发现了严重到必须立即修复的软件缺陷的时候，就需要从master分支上指定的 tag 版本派生 hotfix 分支来组织代码的紧急修复工作。修复后同时合并到 master 和 develop 分支，然后再创建 release 分支，更改版本号中的修订号，重新走发布流程。
+
+​				当 release 分支还存在，应该直接合并到 release 分支上，而不是 develop 分支上，然后走 release 分支流程。
+
+​		辅助分支 feature、bugfix、hotfix 、release 分支分别在本次需求研发结束、本次 bug 修复结束、线上 bug 修复结束、版本发布结束后删除。
 
 #### 1.2.2  commit message 规范
 
-​		在项目中使用 commitizen，并使用 commit lint 做提交信息的格式校验。生成 changelog 使用 conventional-changelog-cli 。
+​		我们使用 [Angular 团队的规范](https://link.zhihu.com/?target=https%3A//github.com/angular/angular.js/blob/master/DEVELOPERS.md%23-git-commit-guidelines)，借助 commit message 格式化工具 [commitizen](https://github.com/commitizen/cz-cli)，并使用 commit lint 做提交信息的格式校验。生成 changelog 使用 conventional-changelog-cli 。
 
 - 安装依赖
 
@@ -61,7 +83,7 @@
   npm install -D @commitlint/cli @commitlint/config-conventional 
   ```
 
-- 然后使用 cz-conventional-changelog 初始化项目，需要node >=10, npm >=6。
+- 然后选择一个 Adapter 作为提交规范，这里选择 cz-conventional-changelog，一套适用于commitizen的Angular团队规范初始化项目，需要node >= 10, npm >= 6。
 
   ```javascript
   commitizen init cz-conventional-changelog --save --save-exact
@@ -78,6 +100,8 @@
 - 在提交 commit 前使用 husky 添加钩子，做格式校验。
 
   ```javascript
+  npm install -D husky
+  
   // .commitlintrc.js
   module.exports = { extends: ['@commitlint/config-conventional'] }
   
@@ -91,38 +115,74 @@
   }
   ```
 
-### 1.3  开发规范
+- 提交时使用 git cz 代替 git commit。
 
-- JavaScript 代码风格：[airbnb](https://github.com/airbnb/javascript) 
-- CSS 代码风格，命名规范
+### 1.3  项目构建规范
 
-### 1.4  构建规范
+- 优先使用框架的脚手架构建项目。vue 使用 vue-cli 3，react 使用 create-react-app，或者使用配置比较成熟的项目模板。
 
-​		vue 使用 vue-cli 3，react 使用 create-react-app，或者有一份配置好的可用的项目模板。
+### 1.4  开发流程规范
 
-### 1.5  发布工作流规范
+​		一个项目的整个生命周期中开发流程大概是这样的：
+
+- 初始化 git 仓库，从 master 切出一个 develop 分支。
+
+  ```bash
+  git init
+  git checkout -b develop master
+  ```
+
+- 从 develop 分支切出 feature-* 分支开始搭建项目结构集成一些工具。（feature 应该只存在于开发人员的代码库中，不应该在远程服务器上）
+
+  ```bash
+  git checkout -b feature-* develop
+  ```
+
+- 当每天完成一些代码，跑单元测试
+
+  
+
+git flow 服务器只存在 master 和 develop 分支，那么新功能协同开发和日常代码提交怎么办，每次可以提交就向 develop 合并一次吗？使用 git flow 要 fork 到自己的
+
+如果使用 git folw，在哪个阶段跑单元测试，哪个阶段跑集成测试，哪个阶段 code review ？
+
+单元测试是 develop 向master 提交时跑还是每日feature 向 develop 提交时跑，这样每次开发代码就要同时写单元测试的代码，
+
+release 分支可以限定权限，比如只能由负责人或组长来
+
+### 1.5  持续集成
+
+- 
+
+  
+
+- 保证本地构建环境与线上构建环境的一致，如 Node 版本、npm 版本
+
+- 保证构建失败后有原来可使用的版本的缓存，回滚，一旦当前版本发生问题，就要回滚到上一个版本的构建结果。最简单的做法就是修改一下符号链接，指向上一个版本的目录。
+
+- 触发的条件。什么时候自动构建。
+
+- 确定持续集成中要做哪些事情。
+
+### 1.6  持续部署
+
+部署到类生产环境进行更多的测试
+
+### 1.7  发布流程
 
 ​		软件产品对外发布的一整套流程，将流程规范后，可实现自动化。一个典型的发布工作流程如下：
 
-- 代码变更
-- 单元测试
-- 将代码提交到远程版本库
-- 程序通过持续集成测试
+- 从 develop 分支切出 release 分支
 - 更改 package.json 中的 version
 - 生成 changelog
 - 提交 package.json 和 CHANGELOG.md 文件
-- 打 tag ，推送 tag 到远程版本库
-
-### 1.6  持续集成规范  - 待完善
-
-- 保证本地构建环境与线上构建环境的一致，如 Node 版本、npm 版本
-- 保证构建失败后有原来可使用的版本的缓存
-- 触发的条件。什么时候自动构建。
-- 确定持续集成中要做哪些事情。
+- 将release 分支合并到 master 分支，在 master 分支打 tag ，同时将 release 分支合并到 develop 分支
 
 ### 1.7  任务管理
 
 ​		任务管理工具可以帮助 leader 了解任务进度，清晰的看到哪些需要做，哪些正在做，完成之后及时更改任务状态。
+
+​		任务管理工具中的开发、bug 修复条目应该与分支存在联系。
 
 ## 2  技术选型
 
@@ -148,16 +208,12 @@
 
 ### 2.2  其它
 
-- 项目的目录组织形式
-- css 命名方式，公共代码定义哪些内容
 - js 的常用工具函数库
 - 迎接新技术，考虑学习成本、收益和风险
 
-
-
 ## 3  浏览器兼容性
 
-​		应该根据公司的项目类型或者目标用户确定软件要兼容的浏览器版本.
+​		应该根据公司的项目类型或者目标用户确定软件要兼容的浏览器版本。
 
 ### 3.1  确定兼容策略
 
@@ -175,7 +231,7 @@
 
 - 项目命名：小写字母 + 连字符，字母开头。
 - 项目目录组织风格。
-- 常用的 js ，css 文件的名称。
+- 常用的 js ，css 文件的名称。公共代码定义哪些内容。
 - 项目中必须包含的文件：项目说明（READEME.md）、版本变更记录（CHANGELOG.md）、项目许可（LICENSE）
 - 文件命名：小写字母 + 连字符，字母开头。
 
@@ -221,8 +277,92 @@
 
 ## 6  文档规范
 
+哪些内容需要被记录，应该以何种形式（注释、图表、md 文件）、文档应该包含哪些内容（文档模板）
+
+jsdoc
+
+tsdoc
+
+接口文档
+
+测试用例文档
+
+~~测试结果报告~~
+
 ## 7  测试规范
 
-## 8  异常处理、监控和调试规范
+单元测试
 
-## 9  前后端协作规范
+e2e 测试
+
+浏览器兼容性测试
+
+性能测试
+
+安全性测试
+
+测哪些模块
+
+测试结果的指标，应该符合什么条件
+
+相关工具
+
+
+
+## 8  前后端协作规范
+
+### 8.1  协作流程
+
+需求分析
+
+前后端开发讨论
+
+设计接口
+
+并行开发
+
+联调，接口测试
+
+真实环境联调
+
+### 8.2  接口规范
+
+风格：RESTful 、JSONRPC、GrapgQL
+
+接口设计应该考虑的内容：
+
+​	明确数据类型
+
+​	异常情况怎么返回信息
+
+​	空值怎么返回，全部为 nul 还是空的相应类型，例如空数组、空对象、空字符串等
+
+### 8.3  接口文档规范
+
+接口的文档应该包含：
+
+​	版本号
+
+​	服务的入口，例如基本路径 https: //a.b.c
+
+​	简单的使用示例
+
+​	安全和认证：哪些接口需要认证，怎么认证
+
+​	具体的接口定义：
+
+​			接口功能描述
+
+​			请求方法和url
+
+​			请求参数描述（数据类型，是否可选等）
+
+​			响应参数描述（数据类型，空值以何种形式返回）
+
+​			可能的情况：异常、错误处理、错误代码、错误描述
+
+​			请求示例
+
+
+
+​    
