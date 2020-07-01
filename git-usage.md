@@ -142,7 +142,12 @@
 
     
 
-16. 
+16. 删除远程仓库上的文件
+    ```
+    git rm  --cached file_path/file_name
+    git commit -m '删除说明'
+    git push
+    ```
 
     
 
@@ -248,3 +253,13 @@
     ```
 
     ​		每个点代表一次提交，线代表父子关系，而彩色的方块则用来标示一个个引用。 黄点表示 HEAD，红点表示尚未提交的本地变动。
+    
+11. 文件名称大小写写错，git 默认不敏感，不会认为是两个文件
+
+    ```
+    // 在项目构建之初就设置大小写敏感
+    git config core.ignorecase false
+   
+    // 对于已经提交到了远程的
+    git mv old_name new_name
+    ```
