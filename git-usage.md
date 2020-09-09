@@ -21,6 +21,7 @@
 
    ```bash
    git remote add origin(远程库的名字) git@github.com:shizhihuaxu/test.git
+   git remote set-url origin url 切换远程仓库的地址
    ```
 
 4. 克隆已有仓库
