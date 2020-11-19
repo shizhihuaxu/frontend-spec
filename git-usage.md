@@ -150,6 +150,51 @@
     git push
     ```
 
+17. 打标签
+    ```bash
+    # 给指定 commit 打 tag
+    git tag -a tagname commit_id -m '说明信息'
+    -a 用于指定标签名
+    -m 用于添加说明
+    commit_id 为打标签的 id
+    
+    # 直接为分支的最后一次提交打 tag
+    git tag tagname
+    ```
+
+18. 推送到远程
+
+    ```bash
+    # 推送所有的 tag 更改，包括标签的新增与删除修改
+    git push origin --tags 
+    
+    # 只推送单个tag
+    git push origin tagname
+    ```
+
+    
+
+19. 查看 tag 列表
+
+    ```bash
+    git tag
+    ```
+
+    
+
+20. 删除本地 tag 
+
+    ```bash
+    git tag -d tagname
+    ```
+
+20.  删除远程分支上的 tag
+
+    ```bash
+    git push origin :refs/tags/tagname
+    ```
+
+    
     
 
 ## 使用情景
