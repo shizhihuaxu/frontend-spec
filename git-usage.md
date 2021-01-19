@@ -311,3 +311,13 @@
     // 对于已经提交到了远程的，先 cd 到所在的子文件夹
     git mv old_name new_name
     ```
+    
+12. 为分支添加注释工具 git-br
+
+    ```
+    npm i -g git-br  // 全局安装
+    
+    git br // 查看所有分支描述
+    
+    git config branch.分支名.description '描述内容 // 添加描述
+    ```
