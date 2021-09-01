@@ -208,7 +208,7 @@
    git reset HEAD <file>
    ```
 
-2. 丢弃本地所有修改
+2. 丢弃本地所有修改，未
 
    ```bash
    git checkout .
@@ -320,4 +320,19 @@
     git br // 查看所有分支描述
     
     git config branch.分支名.description '描述内容 // 添加描述
+    ```
+13. 撤销已经 commit 后的某个文件
+
+    ```
+    // 查看这个文件的 commit 记录，找到回退到某个状态的 commit_id
+    git log [path of file] 
+    
+    // 切换到此文件的那个 commit 的状态
+    git checkout [commit_id] [path of file] 
+    
+    // 重新添加本次调整
+    git add [path of file]
+   
+    // 更新提交
+    git commit --amend
     ```
