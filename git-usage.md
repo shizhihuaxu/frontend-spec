@@ -195,7 +195,12 @@
     ```bash
     git push origin :refs/tags/tagname
     ```
-
+22. 切到某个 tag
+   
+    ```bash
+    git checkout tagname
+    git checkout tags/tagname
+    ```
     
 
 
@@ -335,4 +340,9 @@
    
     // 更新提交
     git commit --amend
+    ```
+14. 当分支与 tag 同名时，如果只想切到某个 tag
+   
+    ```
+    git checkout tags/tagname
     ```
