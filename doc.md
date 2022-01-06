@@ -56,21 +56,35 @@
 | realease-* | 标记产品中的版本信息 | develop  | develop & master |    版本发布    |
 |  hotfix-*  | 线上发布版 bug 修复  |  master  | develop & master |  bug 修复结束  |
 
-​		master 分支：主分支、受保护分支，不可直接提交代码，发布稳定版，在此分支上打 tag。
 
-​		develop 分支：开发稳定版，此分支所有新功能研发基础。当系统功能测试通过后，向 master 分支提交 pr 。
+长期存在的分支：`master`、 `develop` 、`stable-vx.x`；
 
-​		feature 分支：从 develop 分支切出来进行新功能的开发。单元测试通过后合并到 develop 分支。结束了一次完整的发布流程后，才可创建新的特性分支。
+仅在本次版本发布存在的分支 ：`release`（待发布版本，用于测试环境）、`feature`（用于开发新功能）；
 
-​		release 分支：当 develop 分支的新状态稳定后，从 develop 分支切出来，用于发布分支，适用于产品发布、产品迭代，修改产品版本信息后合并到 develop 分支 ，并且将此分支合并到 master 分支上，然后在 master 分支上打一个 tag。
+临时存在的分支: `hotfix `（用于修复已打 tag 版本出现的问题）；
 
-​		hotfix 分支：
+合并分支使用 `git merge --no-ff ` 将所有提交合并为一个提交，这样想会退整个功能分支的合并比较方便，也可以记录这个功能分支做了哪些修改。
 
-​				当生产环境中的软件遇到了异常情况或者发现了严重到必须立即修复的软件缺陷的时候，就需要从master分支上指定的 tag 版本派生 hotfix 分支来组织代码的紧急修复工作。修复后同时合并到 master 和 develop 分支，然后再创建 release 分支，更改版本号中的修订号，重新走发布流程。
+- 上一个版本结束后，从 develop 分支拉出一个待发布版本的分支，以 release-vx.x（下一个版本的版本号）命名；
+- 同时从 develop 分支拉出一个或多个新的功能分支，以 feature-功能名称（最好以英文命名）命名，每个功能对应一个独立分支，开发页面及联调接口均在此分支上（联调接口需要使用后端 `develop` 分支对应部署环境的 api）；
+- 在 feature 分支上**联调自测完毕后**，合并至 develop 分支，同时合并到 release 分支提测，删除对应 feature 分支，此后测试出来的 bug 均在 release 分支上修复，再从 release 分支上合并回 develop 分支；
+- 待待发布版本的所有功能都已开发、测试修复问题完毕后，在release 分支 `CHANGELOG` 文件夹下新增 `CHANGELOG` 文件，`CHANGELOG` 每个迭代版本一个文件，文件名例如 `CHANGELOG-2.5.md`，每个 `CHANGELOG` 文件包含该发布版本下所有小版本的历史；更新版本拆分说明 `/docs/version.md` 文档；修改 `package.json` version 字段值（仅可写三位，四位打包时会报错），调整其他与版本发布相关的文档；
+- 将 release 分支分别合并到 develop 分支和 master 分支；
+- 给 master 打上tag，vx.x.0.0 ；
+- 在 master 上切出一个 `stable-vx.x` 分支，用于后续修复此版本下的 bug，打 tag；
+- 此版本发布流程结束。
 
-​				当 release 分支还存在，应该直接合并到 release 分支上，而不是 develop 分支上，然后走 release 分支流程。
+ 线上 bug 修复：
 
-​		辅助分支 feature、bugfix、hotfix 、release 分支分别在本次需求研发结束、本次 bug 修复结束、线上 bug 修复结束、版本发布结束后删除。
+- 情景一：影响范围为最新稳定版本之前的某个中间版本及此中间版本之前的版本
+
+  ​		从这个中间版本的 stable 分支拉出一个 hotfix 分支修复问题，cherry-pick 到此中间版本及此中间版本之前的 stable 分支，然后在各个影响的 stable 分支上重新打一个新的 tag;
+
+- 情景二：影响范围为研发中版本及最新稳定版本
+
+  ​		从 `master` 拉取一个 `hotfix 分支` 修复问题，（这个时候修复的bug 如何部署给测试复测），`cherry-pick` 到各个原有的 `stable` 分支、`develop` 分支，重新在各版本 `stable` 分支上打 `tag`。
+
+- 注意：更改changelog 文档，`changelog` 文档要回到各个 `stable` 分支去写，因为每个版本 changelog 中的 tag 不一样，文档内容会有所不同，不可统一在 hotfix 中处理。
 
 #### 1.2.2  commit message 规范
 
