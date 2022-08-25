@@ -346,3 +346,8 @@
     ```
     git checkout tags/tagname
     ```
+15. 撤销 commit --amend
+   
+    ```
+    git reset --soft HEAD@{1}
+    ```
