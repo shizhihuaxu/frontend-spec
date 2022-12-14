@@ -81,7 +81,8 @@
     ```
     git add filename		 添加某个文件
     git add .				添加所有文件
-    git add -u 				只添加改动过的文件
+    git add -u 			只添加改动过的文件
+    git add --all -- :!file-name-1 :!file-path-1 添加所有文件时排除掉某个文件或文件夹（mac or linux 需要把 :!file 的部分用引号包起来）
     ```
 
 11. 暂存代码与重新获取
