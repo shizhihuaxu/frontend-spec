@@ -371,3 +371,25 @@
       -f 强制删除，不保留文件
       -r 递归删除文件夹
     ```
+    
+19. 使用 rebase 合并
+
+    ```
+    # 切换到带有想要合并的功能的分支
+    git checkout [branchname]
+    
+    # 向最终目标分支 rebase
+    git rebase [branchname]
+    
+    # 如果有冲突，解决冲突后
+    git add [file]
+    git rebase --continue
+    
+    # 然后回到目标分支，merge 功能分支
+    git checkout [branchname] 
+    git merge [branchname]
+    
+    # 终止 rebase
+    git rebase --abort
+    ```
+    
