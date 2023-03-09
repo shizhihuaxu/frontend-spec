@@ -372,20 +372,20 @@
       -r 递归删除文件夹
     ```
     
-19. 使用 rebase 合并
+19. 当遇到冲突时，使用 rebase 合并（不要在多人协作的分支上使用 rebase，只在自己负责的分支上rebase ，处理问题解决冲突后 merge 到多人协作的分支）
 
     ```
-    # 切换到带有想要合并的功能的分支
+    # 切换功能开发的分支
     git checkout [branchname]
     
-    # 向最终目标分支 rebase
+    # 将合并的目标分支 rebase 到当前功能分支
     git rebase [branchname]
     
     # 如果有冲突，解决冲突后
     git add [file]
     git rebase --continue
     
-    # 然后回到目标分支，merge 功能分支
+    # 然后回到合并的目标分支，merge 功能分支
     git checkout [branchname] 
     git merge [branchname]
     
