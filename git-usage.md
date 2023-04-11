@@ -266,7 +266,8 @@
    
    // 合并多个 commit A~C 的所有提交
    git cherry-pick commit_A commit_B commit_C
-   git cherry-pick commit_A..Commit_C  
+   git cherry-pick commit_A..Commit_C  // 不包含A
+   git cherry-pick commit_A^..Commit_C   // 包含A
    ```
 
    
