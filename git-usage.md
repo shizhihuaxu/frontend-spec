@@ -202,6 +202,12 @@
     git checkout tagname
     git checkout tags/tagname
     ```
+23. 跨分支读取文件内容、目录列表
+   
+    ```bash
+    git cat-file -p [branch]:[文件相对路径]
+    git ls-tree [branch]:[目录相对路径]
+    ```
     
 
 
